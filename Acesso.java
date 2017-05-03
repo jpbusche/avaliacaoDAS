@@ -1,4 +1,3 @@
-
 class Acesso {
 	
 	private CalculaHorario calculaHorario = new CalculaHorario();
@@ -10,10 +9,7 @@ class Acesso {
 	public int horaSaida, 
 			   minutosSaida;
 	
-
-
 	public Acesso() {}
-
 	
 	public Acesso(int dia, int mes, int ano, int horaEntrada, int minutosEntrada) { 
 		this.dia = dia;
@@ -23,35 +19,28 @@ class Acesso {
 		this.minutosEntrada = minutosEntrada;
 	}
 	
-	
-	public float calcularValor() { 
+		public float calcularValor() { 
 		float valorTotal = calculaHorario.calcularValor(horaEntrada, horaSaida, minutosEntrada, minutosSaida);
 		return valorTotal;
 	}
-	
-	
+		
 	public void setHoraSaida(int horaSaida) {
 		this.horaSaida = horaSaida;
 	}
 
-
 	public void setMinutosSaida(int minutosSaida) {
 		this.minutosSaida = minutosSaida;
-	}
-	
-	
-	
+	}	
 }
-
 
 class CalculaHorario {
 
-	public static final float VALOR_FRACAO = (float) 2.0;
-	public static final float VALOR_HORA = (float) 7.0;
-	public static final float VALOR_DIARIA = (float) 30.0;
+	private static final float VALOR_FRACAO = (float) 2.0;
+	private static final float VALOR_HORA = (float) 7.0;
+	private static final float VALOR_DIARIA = (float) 30.0;
 
-	public int quantidadeHoras;
-	public int quantidadeMinutos;
+	private int quantidadeHoras;
+	private int quantidadeMinutos;
 
 	public CalculaHorario() {}
 
@@ -63,30 +52,54 @@ class CalculaHorario {
 			return VALOR_DIARIA;
 		} else {
 			if (totalHoras == 0) {
-				quantidadeMinutos = totalMinutos;
+				setHorasMinutos(totalHoras, totalMinutos);
 			}
 			else if (totalHoras > 0 && totalMinutos == 0) {
-				quantidadeMinutos = totalMinutos;
-				quantidadeHoras = totalHoras;
+				setHorasMinutos(totalHoras, totalMinutos);
 			}
 			else if (totalHoras > 0 && totalMinutos > 1) {
-				quantidadeMinutos = totalMinutos;
-				quantidadeHoras = totalHoras;
+				setHorasMinutos(totalHoras, totalMinutos);
 			}
 			else if (totalHoras > 0 && totalMinutos < 0){
-				quantidadeMinutos = minutosSaida + (60 - minutosEntrada);
-				quantidadeHoras = totalHoras - 1;
+				int minutosNegativos = minutosSaida + (60 - minutosEntrada);
+				setHorasMinutos(totalHoras - 1, minutosNegativos);;
 			}
 			else {
-				quantidadeHoras = 0;
-				quantidadeMinutos = 0;
+				setHorasMinutos(0, 0);;
 			}
 			
-			float valorTotalHoras = quantidadeHoras * VALOR_HORA;
-			float valorTotalMinutos = (float) Math.ceil(quantidadeMinutos / 15.0) * VALOR_FRACAO;		
-			float valorTotal = valorTotalHoras + valorTotalMinutos; 
-				
+			float valorTotal = calcularValorTotal();
+
 			return valorTotal;
 		}
+	}
+
+	public float getQuantidadeHoras() {
+		return quantidadeHoras;
+	}
+
+	public float getQuantidadeMinutos() {
+		return quantidadeMinutos;
+	}
+
+	public void setQuantidadeHoras(int horas) {
+		quantidadeHoras = horas;
+	}
+
+	public void setQuantidadeMinutos(int minutos) {
+		quantidadeMinutos = minutos;
+	}
+
+	private float calcularValorTotal() {
+		final float valorTotalHoras = getQuantidadeHoras() * VALOR_HORA;
+		final float valorTotalMinutos = (float) Math.ceil(getQuantidadeMinutos() / 15.0) * VALOR_FRACAO;		
+		final float valorTotal = valorTotalHoras + valorTotalMinutos; 
+				
+		return valorTotal;
+	}
+
+	private void setHorasMinutos(int horas, int minutos) {
+		setQuantidadeHoras(horas);
+		setQuantidadeMinutos(minutos);
 	}
 }
