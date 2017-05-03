@@ -1,10 +1,8 @@
 
-public class Acesso {
-
-	public static final float VALOR_FRACAO = (float) 2.0;
-	public static final float VALOR_HORA = (float) 7.0;
-	public static final float VALOR_DIARIA = (float) 30.0;
+class Acesso {
 	
+	private CalculaHorario calculaHorario = new CalculaHorario();
+
 	public String placa;
 	public int dia, mes, ano;
 	public int horaEntrada, 
@@ -27,8 +25,38 @@ public class Acesso {
 	
 	
 	public float calcularValor() { 
-		int quantidadeHoras = horaSaida - horaEntrada; 
-		int quantidadeMinutos; 
+		float valorTotal = calculaHorario.calcularValor(horaEntrada, horaSaida, minutosEntrada, minutosSaida);
+		return valorTotal;
+	}
+	
+	
+	public void setHoraSaida(int horaSaida) {
+		this.horaSaida = horaSaida;
+	}
+
+
+	public void setMinutosSaida(int minutosSaida) {
+		this.minutosSaida = minutosSaida;
+	}
+	
+	
+	
+}
+
+
+class CalculaHorario {
+
+	public static final float VALOR_FRACAO = (float) 2.0;
+	public static final float VALOR_HORA = (float) 7.0;
+	public static final float VALOR_DIARIA = (float) 30.0;
+
+	public CalculaHorario() {}
+
+	public float calcularValor(int horaEntrada, int horaSaida, int minutosEntrada, int minutosSaida) {
+		int totalHoras = horaSaida - horaEntrada; 
+		
+		if(totalHoras >= 9)
+			return VALOR_DIARIA;
 		
 		if (horaSaida == horaEntrada)
 			quantidadeMinutos = minutosSaida - minutosEntrada;
@@ -47,26 +75,10 @@ public class Acesso {
 			quantidadeMinutos = 0;
 		}
 		
-		float valorTotal = 0; 
-		valorTotal += quantidadeHoras * VALOR_HORA;
-		valorTotal += Math.ceil(quantidadeMinutos / 15.0) * VALOR_FRACAO;		
-		
-		if (quantidadeHoras >=9)
-			return VALOR_DIARIA;
-		else 
-			return valorTotal;
+		float valorTotalHoras = quantidadeHoras * VALOR_HORA;
+		float valorTotalMinutos = (float) Math.ceil(quantidadeMinutos / 15.0) * VALOR_FRACAO;		
+		float valorTotal = valorTotalHoras + valorTotalMinutos; 
+			
+		return valorTotal;
 	}
-	
-	
-	public void setHoraSaida(int horaSaida) {
-		this.horaSaida = horaSaida;
-	}
-
-
-	public void setMinutosSaida(int minutosSaida) {
-		this.minutosSaida = minutosSaida;
-	}
-	
-	
-	
 }
